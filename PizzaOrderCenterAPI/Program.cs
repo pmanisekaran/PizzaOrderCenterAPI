@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using PizzaOrderCenterAPI;
 using PizzaOrderCenterAPI.DataAccess;
+using PizzaOrderCenterAPI.Models;
 using PizzaOrderCenterAPI.Services;
+using System;
 
 internal class Program
 {
@@ -8,9 +13,10 @@ internal class Program
 	{
 		var builder = WebApplication.CreateBuilder(args);
 
+		// Add services to the container.
 		ConfigurationManager configuration = builder.Configuration; // allows both to access and to set up the config
 		ConfigureServices(builder.Services, configuration);
-		// Add services to the container.
+
 
 		builder.Services.AddControllers();
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -18,6 +24,7 @@ internal class Program
 		builder.Services.AddSwaggerGen();
 
 		var app = builder.Build();
+
 
 		// Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
@@ -33,23 +40,23 @@ internal class Program
 		app.MapControllers();
 
 		app.Run();
+			 
 	}
 
-	private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
+	private static void ConfigureServices(IServiceCollection services, ConfigurationManager configurationManager )
 	{
-		var useInMemoryDB = Convert.ToBoolean(configuration.GetSection("PizzaOrderCenterSettings")["UseInMemoryDatabase"]);
-		if (useInMemoryDB)
-		{
-			services.AddDbContext<PizzaOrderCenterDbContext>(
-				options => options.UseSqlite("PizzaOrderCenterDbContext.db"));
-		}
-		else
-		{
-			services.AddDbContext<PizzaOrderCenterDbContext>(
-				options => options.UseSqlite(@"Data Source=DataAccess\PizzaOrderCenterDbContext.db"));
-		}
+		var settingsSection = configurationManager.GetConnectionString("PizzaOrderCenterDbConnectionString");
+
+		//services.AddDbContext<PizzaOrderCenterDbContext>(
+		//	options => options.UseInMemoryDatabase("PizzaOrderCenterDbContext.db"));
+
+		services.AddDbContext<PizzaOrderCenterDbContext>(
+			options => options.UseSqlite(@"Data Source=DataAccess\PizzaOrderCenterDbContext.db"));
+
 		services.AddScoped<IPizzaOrderCenterDbContext, PizzaOrderCenterDbContext>();
 		services.AddTransient<IPizzeriaService, PizzeriaService>();
 
 	}
+
+
 }

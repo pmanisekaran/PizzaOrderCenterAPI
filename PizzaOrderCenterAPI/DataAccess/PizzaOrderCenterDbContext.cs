@@ -6,6 +6,7 @@ namespace PizzaOrderCenterAPI.DataAccess
 {
 	public class PizzaOrderCenterDbContext : DbContext, IPizzaOrderCenterDbContext
 	{
+		private IConfiguration _configuration;
 		public DbSet<Pizzeria> Pizzerias { get; set; }
 		public DbSet<Pizza> Pizzas { get; set; }
 		public DbSet<PizzaTopping> Toppings { get; set; }
@@ -15,8 +16,16 @@ namespace PizzaOrderCenterAPI.DataAccess
 
 		public DbSet<PizzaOrderItemTopping> PizzaOrderItemToppings { get; set; }
 
-		public PizzaOrderCenterDbContext(DbContextOptions<PizzaOrderCenterDbContext> options) : base(options)
-		{ }
+		public PizzaOrderCenterDbContext(DbContextOptions<PizzaOrderCenterDbContext> options, IConfiguration configuration) : base(options)
+		{ 
+			_configuration = configuration;
+		}
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			base.OnConfiguring(optionsBuilder);
+		}
+
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

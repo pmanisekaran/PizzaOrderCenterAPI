@@ -23,7 +23,10 @@ namespace PizzaOrderCenterAPI.Services
 			return _context.Pizzerias.FirstOrDefault(x => x.PizzeriaId == pizzeria.PizzeriaId);
 		}
 
-		public List<Pizzeria> GetAll() => _context.Pizzerias.ToList();
+		public List<Pizzeria> GetAll()
+		{
+			return 	_context.Pizzerias.ToList();
+		}
 
 		public Pizzeria? Delete(int pizzeriaId)
 		{ 
