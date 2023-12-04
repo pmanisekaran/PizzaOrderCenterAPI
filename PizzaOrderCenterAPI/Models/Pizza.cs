@@ -16,6 +16,7 @@ namespace PizzaOrderCenterAPI.Models
 		/// Pizza Name
 		/// </summary>
 		[Required]
+		[MaxLength(255)]
 		public string PizzaName { get; set; } = "Default Pizza Name";
 
 		

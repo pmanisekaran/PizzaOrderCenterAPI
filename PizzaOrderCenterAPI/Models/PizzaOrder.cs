@@ -15,6 +15,7 @@ namespace PizzaOrderCenterAPI.Models
 		/// if customer proides any name
 		/// </summary>
 		[Required]
+		[MaxLength(255)]
 		public string CustomerName { get; set; } = "Not Provided";
 
 
