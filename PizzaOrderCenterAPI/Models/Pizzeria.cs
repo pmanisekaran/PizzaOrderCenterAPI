@@ -2,6 +2,9 @@
 
 namespace PizzaOrderCenterAPI.Models
 {
+	/// <summary>
+	/// Pizzeria definition. It defines it location and its menu
+	/// </summary>
 	public class Pizzeria
 	{
 
@@ -9,15 +12,23 @@ namespace PizzaOrderCenterAPI.Models
 		[Key]
 		public int PizzeriaId { get; set; }
 
+		/// <summary>
+		/// Name of the pizzeria
+		/// </summary>
 		[Required]
 		[MaxLength(255)]
 		public string PizzeriaName { get; set; }
 
+		/// <summary>
+		/// Location where pizzeria resides. Free text.
+		/// </summary>
 		[Required]
 		[MaxLength(255)]
-		public int Location { get; set; }
+		public string Location { get; set; } = "Default Location";
 
-		[Required]
+		/// <summary>
+		/// This is pizzeria menu. A list of pizzas
+		/// </summary>
 		ICollection<Pizza> Pizzas { get; set; }
 
 	}
