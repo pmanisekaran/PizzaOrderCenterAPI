@@ -8,7 +8,8 @@ internal class Program
 	{
 		var builder = WebApplication.CreateBuilder(args);
 
-		ConfigureServices(builder.Services);
+		ConfigurationManager configuration = builder.Configuration; // allows both to access and to set up the config
+		ConfigureServices(builder.Services, configuration);
 		// Add services to the container.
 
 		builder.Services.AddControllers();
@@ -34,12 +35,21 @@ internal class Program
 		app.Run();
 	}
 
-	private static void ConfigureServices(IServiceCollection services)
+	private static void ConfigureServices(IServiceCollection services, ConfigurationManager configuration)
 	{
+		var useInMemoryDB = Convert.ToBoolean(configuration.GetSection("PizzaOrderCenterSettings")["UseInMemoryDatabase"]);
+		if (useInMemoryDB)
+		{
+			services.AddDbContext<PizzaOrderCenterDbContext>(
+				options => options.UseSqlite("PizzaOrderCenterDbContext.db"));
+		}
+		else
+		{
+			services.AddDbContext<PizzaOrderCenterDbContext>(
+				options => options.UseSqlite(@"Data Source=DataAccess\PizzaOrderCenterDbContext.db"));
+		}
 		services.AddScoped<IPizzaOrderCenterDbContext, PizzaOrderCenterDbContext>();
 		services.AddTransient<IPizzeriaService, PizzeriaService>();
 
-		services.AddDbContext<PizzaOrderCenterDbContext>(
-			options => options.UseSqlite(@"Data Source=DataAccess\PizzaOrderCenterDbContext.db"));
 	}
 }

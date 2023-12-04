@@ -24,29 +24,27 @@ namespace PizzaOrderCenterAPI.Controllers
 		}
 
 		// GET api/<PizzeriaController>/5
+		// if id does not exists, no content is returned, otherwise code 204 and the actual object
 		[HttpGet("{id}")]
-		public string Get(int id)
+		public Pizzeria? Get(int id)
 		{
-			return "value";
+			return _pizzeriaService.GetPizzeria(id);
 		}
 
 		// POST api/<PizzeriaController>
 		[HttpPost]
-		public Pizzeria? Post(Pizzeria pizzeria)
+		public Pizzeria? Save(Pizzeria pizzeria)
 		{
-			return _pizzeriaService.Add(pizzeria);
+			return _pizzeriaService.Save(pizzeria);
 		}
 
-		// PUT api/<PizzeriaController>/5
-		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
-		{
-		}
-
+		
 		// DELETE api/<PizzeriaController>/5
+		// if id does not exists, no content is returned otherwise code 204 and the actual object
 		[HttpDelete("{id}")]
-		public void Delete(int id)
+		public Pizzeria? Delete(int id)
 		{
+			return _pizzeriaService.Delete(id);
 		}
 	}
 }
