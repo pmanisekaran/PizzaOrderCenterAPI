@@ -39,7 +39,7 @@ internal class Program
 
 		app.MapControllers();
 
-		app.InitialiseInMemoryDatabase(configurationManager);
+		app.InitialiseInMemoryDatabase(configurationManager); //extension method
 		app.Run();
 		
 			 
@@ -65,6 +65,9 @@ internal class Program
 
 		services.AddScoped<IPizzaOrderCenterDbContext, PizzaOrderCenterDbContext>();
 		services.AddTransient<IPizzeriaService, PizzeriaService>();
+		services.AddTransient<IPizzeriaMenuService, PizzeriaMenuService>();
+		services.AddTransient<IPizzaToppingService, PizzaToppingService>();
+		
 
 	}
 
