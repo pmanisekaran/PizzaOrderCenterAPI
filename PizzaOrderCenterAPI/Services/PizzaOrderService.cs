@@ -11,15 +11,27 @@ namespace PizzaOrderCenterAPI.Services
 
 		public PizzaOrder? Save(PizzaOrder pizzaOrder)
 		{
-			var existingPizzaOrder = _context.PizzaOrders.FirstOrDefault(x => x.PizzaOrderId == pizzaOrder.PizzaOrderId);
+			var existingPizzaOrder = _context.PizzaOrders
+									.Where(x => x.PizzaOrderId == pizzaOrder.PizzaOrderId)
+									.Include(x=>x.PizzaOrderItems)
+									.SingleOrDefault();
+									
 			if (existingPizzaOrder != null)
 			{
+				
+				
 				existingPizzaOrder.PizzaOrderId = pizzaOrder.PizzaOrderId;
-				existingPizzaOrder.CustomerName = pizzaOrder.CustomerName;
+				existingPizzaOrder.CustomerName = Guid.NewGuid().ToString();
+				existingPizzaOrder.PizzaOrderItems = pizzaOrder.PizzaOrderItems;
+				
 				
 			}
 			else
 				_context.PizzaOrders.Add(pizzaOrder);
+			
+			pizzaOrder = existingPizzaOrder == null ? pizzaOrder : existingPizzaOrder;
+
+			OrderCalculator.CalculateAndSetOrderTotal(pizzaOrder, _context);
 			_context.Save();
 			return _context.PizzaOrders.FirstOrDefault(x => x.PizzaOrderId == pizzaOrder.PizzaOrderId);
 		}
