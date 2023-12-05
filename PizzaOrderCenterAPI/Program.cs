@@ -14,8 +14,8 @@ internal class Program
 		var builder = WebApplication.CreateBuilder(args);
 
 		// Add services to the container.
-		ConfigurationManager configuration = builder.Configuration; // allows both to access and to set up the config
-		ConfigureServices(builder.Services, configuration);
+		ConfigurationManager configurationManager = builder.Configuration; // allows both to access and to set up the config
+		ConfigureServices(builder.Services, configurationManager);
 
 
 		builder.Services.AddControllers();
@@ -39,19 +39,29 @@ internal class Program
 
 		app.MapControllers();
 
+		app.InitialiseInMemoryDatabase(configurationManager);
 		app.Run();
+		
 			 
 	}
 
 	private static void ConfigureServices(IServiceCollection services, ConfigurationManager configurationManager )
 	{
-		var settingsSection = configurationManager.GetConnectionString("PizzaOrderCenterDbConnectionString");
+		var connectionString = configurationManager.GetConnectionString("PizzaOrderCenterDbConnectionString");
 
-		//services.AddDbContext<PizzaOrderCenterDbContext>(
-		//	options => options.UseInMemoryDatabase("PizzaOrderCenterDbContext.db"));
+		var useInMemoryDB = Convert.ToBoolean( configurationManager.GetRequiredSection("PizzaOrderCenterAppSettings")["UseInMemoryDatabase"]);
 
-		services.AddDbContext<PizzaOrderCenterDbContext>(
-			options => options.UseSqlite(@"Data Source=DataAccess\PizzaOrderCenterDbContext.db"));
+		if (useInMemoryDB)
+		{
+			services.AddDbContext<PizzaOrderCenterDbContext>(
+				options => options.UseInMemoryDatabase("PizzaOrderCenterDbContext.db"));
+			
+		}
+		else
+		{
+			services.AddDbContext<PizzaOrderCenterDbContext>(
+				options => options.UseSqlite(connectionString));
+		}
 
 		services.AddScoped<IPizzaOrderCenterDbContext, PizzaOrderCenterDbContext>();
 		services.AddTransient<IPizzeriaService, PizzeriaService>();
