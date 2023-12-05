@@ -13,38 +13,6 @@ namespace PizzaOrderCenterAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PizzaOrderItems",
-                columns: table => new
-                {
-                    PizzaOrderItemId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    PizzaId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Qty = table.Column<int>(type: "INTEGER", nullable: false),
-                    LineTotal = table.Column<decimal>(type: "TEXT", nullable: false),
-                    PizzaOrderId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PizzaOrderItems", x => x.PizzaOrderItemId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PizzaOrderItemToppings",
-                columns: table => new
-                {
-                    PizzaOrderItemToppingId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    PizzaToppingId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Qty = table.Column<int>(type: "INTEGER", nullable: false),
-                    PizzaOrderItemId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ToppingLineItemTotal = table.Column<decimal>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PizzaOrderItemToppings", x => x.PizzaOrderItemToppingId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PizzaOrders",
                 columns: table => new
                 {
@@ -100,6 +68,59 @@ namespace PizzaOrderCenterAPI.Migrations
                     table.PrimaryKey("PK_Toppings", x => x.PizzaToppingId);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PizzaOrderItems",
+                columns: table => new
+                {
+                    PizzaOrderItemId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    PizzaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Qty = table.Column<int>(type: "INTEGER", nullable: false),
+                    LineTotal = table.Column<decimal>(type: "TEXT", nullable: false),
+                    PizzaOrderId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PizzaOrderItems", x => x.PizzaOrderItemId);
+                    table.ForeignKey(
+                        name: "FK_PizzaOrderItems_PizzaOrders_PizzaOrderId",
+                        column: x => x.PizzaOrderId,
+                        principalTable: "PizzaOrders",
+                        principalColumn: "PizzaOrderId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PizzaOrderItemToppings",
+                columns: table => new
+                {
+                    PizzaOrderItemToppingId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    PizzaToppingId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Qty = table.Column<int>(type: "INTEGER", nullable: false),
+                    PizzaOrderItemId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ToppingLineItemTotal = table.Column<decimal>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PizzaOrderItemToppings", x => x.PizzaOrderItemToppingId);
+                    table.ForeignKey(
+                        name: "FK_PizzaOrderItemToppings_PizzaOrderItems_PizzaOrderItemId",
+                        column: x => x.PizzaOrderItemId,
+                        principalTable: "PizzaOrderItems",
+                        principalColumn: "PizzaOrderItemId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "PizzaOrders",
+                columns: new[] { "PizzaOrderId", "CustomerName", "OrderTotal" },
+                values: new object[,]
+                {
+                    { 1, "some name", 0m },
+                    { 2, "some name 2", 0m }
+                });
+
             migrationBuilder.InsertData(
                 table: "Pizzas",
                 columns: new[] { "PizzaId", "PizzaName", "PizzaPrice", "PizzeriaId" },
@@ -137,19 +158,43 @@ namespace PizzaOrderCenterAPI.Migrations
                     { 3, "Salami" },
                     { 4, "Olives" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "PizzaOrderItems",
+                columns: new[] { "PizzaOrderItemId", "LineTotal", "PizzaId", "PizzaOrderId", "Qty" },
+                values: new object[,]
+                {
+                    { 1, 0m, 1, 1, 2 },
+                    { 2, 0m, 2, 1, 2 },
+                    { 3, 0m, 3, 1, 3 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PizzaOrderItemToppings",
+                columns: new[] { "PizzaOrderItemToppingId", "PizzaOrderItemId", "PizzaToppingId", "Qty", "ToppingLineItemTotal" },
+                values: new object[,]
+                {
+                    { 1, 1, 1, 2, 0m },
+                    { 2, 1, 2, 2, 0m },
+                    { 3, 2, 3, 2, 0m }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PizzaOrderItems_PizzaOrderId",
+                table: "PizzaOrderItems",
+                column: "PizzaOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PizzaOrderItemToppings_PizzaOrderItemId",
+                table: "PizzaOrderItemToppings",
+                column: "PizzaOrderItemId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PizzaOrderItems");
-
-            migrationBuilder.DropTable(
                 name: "PizzaOrderItemToppings");
-
-            migrationBuilder.DropTable(
-                name: "PizzaOrders");
 
             migrationBuilder.DropTable(
                 name: "Pizzas");
@@ -159,6 +204,12 @@ namespace PizzaOrderCenterAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Toppings");
+
+            migrationBuilder.DropTable(
+                name: "PizzaOrderItems");
+
+            migrationBuilder.DropTable(
+                name: "PizzaOrders");
         }
     }
 }

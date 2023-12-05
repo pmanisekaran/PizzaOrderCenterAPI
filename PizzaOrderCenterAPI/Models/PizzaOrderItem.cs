@@ -12,7 +12,7 @@ namespace PizzaOrderCenterAPI.Models
 		public int PizzaOrderItemId { get; set; }
 
 		/// <summary>
-		/// Tells you which pizza is being ordered
+		/// Tells you which pizza is being ordered, it is also the link to from which pizzeria this pizza was to come from
 		/// </summary>
 		[Required]
 		public int PizzaId { get; set; }
@@ -35,12 +35,12 @@ namespace PizzaOrderCenterAPI.Models
 		/// </summary>
 		[Required]
 		public int PizzaOrderId { get; set; }
-		
-	
+
+
 
 		/// <summary>
 		/// If there any topping to a pizza, it would be here. Each pizza can have its own topping
 		/// </summary>
-		ICollection<PizzaOrderItem> PizzaOrderItemToppings { get; set; }
+		public List<PizzaOrderItemTopping> PizzaOrderItemToppings { get; set; }
 	}
 }

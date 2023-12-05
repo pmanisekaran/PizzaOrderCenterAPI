@@ -14,6 +14,7 @@ namespace PizzaOrderCenterAPI.Models
 		/// <summary>
 		/// if customer proides any name
 		/// </summary>
+		
 		[Required]
 		[MaxLength(255)]
 		public string CustomerName { get; set; } = "Not Provided";
@@ -27,7 +28,7 @@ namespace PizzaOrderCenterAPI.Models
 		/// <summary>
 		/// Order details
 		/// </summary>
-		ICollection<PizzaOrderItem> PizzaOrderItems { get; set; }
+		public List<PizzaOrderItem> PizzaOrderItems { get; set; } 
 
 		
 

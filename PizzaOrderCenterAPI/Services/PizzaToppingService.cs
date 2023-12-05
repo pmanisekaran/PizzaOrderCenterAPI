@@ -28,9 +28,9 @@ namespace PizzaOrderCenterAPI.Services
 			return 	_context.Toppings.ToList();
 		}
 
-		public PizzaTopping? Delete(int PizzaToppingId)
+		public PizzaTopping? Delete(int pizzaToppingId)
 		{ 
-			var PizzaTopping = _context.Toppings.FirstOrDefault(x => x.PizzaToppingId == PizzaToppingId);
+			var PizzaTopping = _context.Toppings.FirstOrDefault(x => x.PizzaToppingId == pizzaToppingId);
 			if (PizzaTopping != null)
 			{
 				_context.Toppings.Remove(PizzaTopping);

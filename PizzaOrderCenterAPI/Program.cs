@@ -67,7 +67,8 @@ internal class Program
 		services.AddTransient<IPizzeriaService, PizzeriaService>();
 		services.AddTransient<IPizzeriaMenuService, PizzeriaMenuService>();
 		services.AddTransient<IPizzaToppingService, PizzaToppingService>();
-		
+		services.AddTransient<IPizzaOrderService, PizzaOrderService>();
+
 
 	}
 

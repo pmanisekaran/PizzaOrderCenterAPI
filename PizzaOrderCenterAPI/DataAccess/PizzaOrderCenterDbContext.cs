@@ -17,7 +17,7 @@ namespace PizzaOrderCenterAPI.DataAccess
 		public DbSet<PizzaOrderItemTopping> PizzaOrderItemToppings { get; set; }
 
 		public PizzaOrderCenterDbContext(DbContextOptions<PizzaOrderCenterDbContext> options, IConfiguration configuration) : base(options)
-		{ 
+		{
 			_configuration = configuration;
 		}
 
@@ -37,10 +37,48 @@ namespace PizzaOrderCenterAPI.DataAccess
 		private void SeedInitialData(ModelBuilder modelBuilder)
 		{
 			SeedPizzeria(modelBuilder);
-
 			SeedPizzas(modelBuilder);
-
 			SeedToppings(modelBuilder);
+			SeedPizzaOrder(modelBuilder);
+			SeedPizzaOrderItems(modelBuilder);
+			SeedPizzaOrderItemToppings(modelBuilder);
+
+		}
+
+
+		private static void SeedPizzaOrder(ModelBuilder modelBuilder)
+		{
+			List<PizzaOrder> toppings = new List<PizzaOrder>()
+			{
+				new PizzaOrder {  PizzaOrderId=1, CustomerName ="some name", OrderTotal=0m },
+				new PizzaOrder { PizzaOrderId=2, CustomerName ="some name 2", OrderTotal=0m },
+			};
+
+			modelBuilder.Entity<PizzaOrder>().HasData(toppings);
+		}
+
+		private static void SeedPizzaOrderItems(ModelBuilder modelBuilder)
+		{
+			List<PizzaOrderItem> pizzaOrderItems = new List<PizzaOrderItem>()
+			{
+				new PizzaOrderItem { PizzaOrderItemId=1, PizzaId =1, PizzaOrderId=1, Qty =2  },
+				new PizzaOrderItem { PizzaOrderItemId=2, PizzaId =2, PizzaOrderId=1, Qty =2  },
+				new PizzaOrderItem { PizzaOrderItemId=3, PizzaId =3, PizzaOrderId=1, Qty =3  },
+			};
+
+			modelBuilder.Entity<PizzaOrderItem>().HasData(pizzaOrderItems);
+		}
+
+		private static void SeedPizzaOrderItemToppings(ModelBuilder modelBuilder)
+		{
+			List<PizzaOrderItemTopping> pizzaOrderItemsTopping = new List<PizzaOrderItemTopping>()
+			{
+				new PizzaOrderItemTopping {  PizzaOrderItemToppingId =1, PizzaOrderItemId =1, PizzaToppingId=1, Qty=2},
+				new PizzaOrderItemTopping {  PizzaOrderItemToppingId =2, PizzaOrderItemId =1, PizzaToppingId=2, Qty=2},
+				new PizzaOrderItemTopping {  PizzaOrderItemToppingId =3, PizzaOrderItemId =2, PizzaToppingId=3, Qty=2},
+			};
+
+			modelBuilder.Entity<PizzaOrderItemTopping>().HasData(pizzaOrderItemsTopping);
 		}
 
 		private static void SeedToppings(ModelBuilder modelBuilder)
@@ -83,7 +121,7 @@ namespace PizzaOrderCenterAPI.DataAccess
 		}
 
 		public void Save()
-		{ 
+		{
 			this.SaveChanges();
 		}
 	}

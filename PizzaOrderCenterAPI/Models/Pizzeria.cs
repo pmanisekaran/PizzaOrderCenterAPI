@@ -29,7 +29,7 @@ namespace PizzaOrderCenterAPI.Models
 		/// <summary>
 		/// This is pizzeria menu. A list of pizzas
 		/// </summary>
-		ICollection<Pizza> Pizzas { get; set; }
+		public List<Pizza> Pizzas { get; set; }
 
 	}
 }

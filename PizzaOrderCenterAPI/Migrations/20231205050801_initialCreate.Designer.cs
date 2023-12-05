@@ -10,7 +10,7 @@ using PizzaOrderCenterAPI.DataAccess;
 namespace PizzaOrderCenterAPI.Migrations
 {
     [DbContext(typeof(PizzaOrderCenterDbContext))]
-    [Migration("20231204095808_initialCreate")]
+    [Migration("20231205050801_initialCreate")]
     partial class initialCreate
     {
         /// <inheritdoc />
@@ -123,6 +123,20 @@ namespace PizzaOrderCenterAPI.Migrations
                     b.HasKey("PizzaOrderId");
 
                     b.ToTable("PizzaOrders");
+
+                    b.HasData(
+                        new
+                        {
+                            PizzaOrderId = 1,
+                            CustomerName = "some name",
+                            OrderTotal = 0m
+                        },
+                        new
+                        {
+                            PizzaOrderId = 2,
+                            CustomerName = "some name 2",
+                            OrderTotal = 0m
+                        });
                 });
 
             modelBuilder.Entity("PizzaOrderCenterAPI.Models.PizzaOrderItem", b =>
@@ -145,7 +159,35 @@ namespace PizzaOrderCenterAPI.Migrations
 
                     b.HasKey("PizzaOrderItemId");
 
+                    b.HasIndex("PizzaOrderId");
+
                     b.ToTable("PizzaOrderItems");
+
+                    b.HasData(
+                        new
+                        {
+                            PizzaOrderItemId = 1,
+                            LineTotal = 0m,
+                            PizzaId = 1,
+                            PizzaOrderId = 1,
+                            Qty = 2
+                        },
+                        new
+                        {
+                            PizzaOrderItemId = 2,
+                            LineTotal = 0m,
+                            PizzaId = 2,
+                            PizzaOrderId = 1,
+                            Qty = 2
+                        },
+                        new
+                        {
+                            PizzaOrderItemId = 3,
+                            LineTotal = 0m,
+                            PizzaId = 3,
+                            PizzaOrderId = 1,
+                            Qty = 3
+                        });
                 });
 
             modelBuilder.Entity("PizzaOrderCenterAPI.Models.PizzaOrderItemTopping", b =>
@@ -168,7 +210,35 @@ namespace PizzaOrderCenterAPI.Migrations
 
                     b.HasKey("PizzaOrderItemToppingId");
 
+                    b.HasIndex("PizzaOrderItemId");
+
                     b.ToTable("PizzaOrderItemToppings");
+
+                    b.HasData(
+                        new
+                        {
+                            PizzaOrderItemToppingId = 1,
+                            PizzaOrderItemId = 1,
+                            PizzaToppingId = 1,
+                            Qty = 2,
+                            ToppingLineItemTotal = 0m
+                        },
+                        new
+                        {
+                            PizzaOrderItemToppingId = 2,
+                            PizzaOrderItemId = 1,
+                            PizzaToppingId = 2,
+                            Qty = 2,
+                            ToppingLineItemTotal = 0m
+                        },
+                        new
+                        {
+                            PizzaOrderItemToppingId = 3,
+                            PizzaOrderItemId = 2,
+                            PizzaToppingId = 3,
+                            Qty = 2,
+                            ToppingLineItemTotal = 0m
+                        });
                 });
 
             modelBuilder.Entity("PizzaOrderCenterAPI.Models.PizzaTopping", b =>
@@ -254,6 +324,34 @@ namespace PizzaOrderCenterAPI.Migrations
                             Location = "Mulgrave",
                             PizzeriaName = "Mulgrave East Pizzeria"
                         });
+                });
+
+            modelBuilder.Entity("PizzaOrderCenterAPI.Models.PizzaOrderItem", b =>
+                {
+                    b.HasOne("PizzaOrderCenterAPI.Models.PizzaOrder", null)
+                        .WithMany("PizzaOrderItems")
+                        .HasForeignKey("PizzaOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PizzaOrderCenterAPI.Models.PizzaOrderItemTopping", b =>
+                {
+                    b.HasOne("PizzaOrderCenterAPI.Models.PizzaOrderItem", null)
+                        .WithMany("PizzaOrderItemToppings")
+                        .HasForeignKey("PizzaOrderItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PizzaOrderCenterAPI.Models.PizzaOrder", b =>
+                {
+                    b.Navigation("PizzaOrderItems");
+                });
+
+            modelBuilder.Entity("PizzaOrderCenterAPI.Models.PizzaOrderItem", b =>
+                {
+                    b.Navigation("PizzaOrderItemToppings");
                 });
 #pragma warning restore 612, 618
         }

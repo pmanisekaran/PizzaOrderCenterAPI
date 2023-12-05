@@ -1,4 +1,5 @@
-﻿using PizzaOrderCenterAPI.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using PizzaOrderCenterAPI.DataAccess;
 using PizzaOrderCenterAPI.Models;
 
 namespace PizzaOrderCenterAPI.Services
@@ -25,7 +26,9 @@ namespace PizzaOrderCenterAPI.Services
 
 		public List<Pizzeria> GetAll()
 		{
-			return 	_context.Pizzerias.ToList();
+			return 	_context.Pizzerias
+							.Include(pizzeria => pizzeria.Pizzas)
+							.ToList();
 		}
 
 		public Pizzeria? Delete(int pizzeriaId)
