@@ -31,7 +31,7 @@ namespace PizzaOrderCenterAPI.Services
 			
 			pizzaOrder = existingPizzaOrder == null ? pizzaOrder : existingPizzaOrder;
 
-			OrderCalculator.CalculateAndSetOrderTotal(pizzaOrder, _context);
+			OrderCalculator.CalculateAndSetOrderTotal(pizzaOrder, _context.Pizzas.ToList(), _context.Toppings.ToList());
 			_context.Save();
 			return _context.PizzaOrders.FirstOrDefault(x => x.PizzaOrderId == pizzaOrder.PizzaOrderId);
 		}

@@ -17,7 +17,7 @@ namespace PizzaOrderCenterAPI.Models
 		/// Pizza topping price. Read only set $1
 		/// </summary>
 		[Required]
-		public decimal PizzaToppingPrice { get; } = 1.0m;
+		public decimal PizzaToppingPrice { get; set; } = 1.0m;
 
 	}
 }
