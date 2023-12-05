@@ -11,6 +11,9 @@ namespace PizzaOrderCenterAPI.Services
 
 		public PizzaOrder? Save(PizzaOrder pizzaOrder)
 		{
+			//skipping topping for now
+			// you cannot delete items from existing order when you update
+
 			var existingPizzaOrder = _context.PizzaOrders
 									.Where(x => x.PizzaOrderId == pizzaOrder.PizzaOrderId)
 									.Include(x=>x.PizzaOrderItems)
@@ -22,7 +25,20 @@ namespace PizzaOrderCenterAPI.Services
 				
 				existingPizzaOrder.PizzaOrderId = pizzaOrder.PizzaOrderId;
 				existingPizzaOrder.CustomerName = Guid.NewGuid().ToString();
-				existingPizzaOrder.PizzaOrderItems = pizzaOrder.PizzaOrderItems;
+				foreach (var item in pizzaOrder.PizzaOrderItems)
+				{
+					var existingItem = existingPizzaOrder.PizzaOrderItems.FirstOrDefault(x => x.PizzaOrderItemId == x.PizzaOrderItemId);
+					if (existingItem != null)
+					{
+						existingItem.Qty = item.Qty;
+						existingItem.PizzaId = item.PizzaId;
+					}
+					else
+					{ 
+						existingPizzaOrder.PizzaOrderItems.Add(item);
+					}
+				}
+			
 				
 				
 			}
