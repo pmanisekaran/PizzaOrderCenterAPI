@@ -22,7 +22,7 @@ namespace TestProject
 		{
 			// Arrange
 			var context = Substitute.For<IPizzaOrderCenterDbContext>();
-			var pizzaOrder = new PizzaOrder {  PizzaOrderId=1, PizzaOrderItems = new List<PizzaOrderItem> (), CustomerName="XX", OrderTotal=0m };
+			var pizzaOrder = new PizzaOrder { PizzaOrderId = 1, PizzaOrderItems = new List<PizzaOrderItem>(), CustomerName = "XX", OrderTotal = 0m };
 			var service = new PizzaOrderService(context);
 
 			// Act
@@ -40,8 +40,9 @@ namespace TestProject
 		{
 			// Arrange
 			var context = Substitute.For<IPizzaOrderCenterDbContext>();
-			var existingPizzaOrder = new PizzaOrder { /* Set existing pizza order properties */ };
-			var updatedPizzaOrder = new PizzaOrder { /* Set updated pizza order properties */ };
+			var pizzaOrderItems = new List<PizzaOrderItem>();
+			var existingPizzaOrder = new PizzaOrder { PizzaOrderId = 11, CustomerName = "XX", OrderTotal = 0, PizzaOrderItems = pizzaOrderItems };
+			var updatedPizzaOrder = new PizzaOrder { PizzaOrderId = 11, CustomerName = "XX", OrderTotal = 0, PizzaOrderItems = pizzaOrderItems };
 			context.PizzaOrders.SingleOrDefault(Arg.Any<System.Linq.Expressions.Expression<System.Func<PizzaOrder, bool>>>())
 				.Returns(existingPizzaOrder);
 
@@ -62,7 +63,7 @@ namespace TestProject
 		{
 			// Arrange
 			var context = Substitute.For<IPizzaOrderCenterDbContext>();
-			var pizzaOrders = new List<PizzaOrder> { /* Create a list of PizzaOrder objects */ };
+			var pizzaOrders = new List<PizzaOrder> { new PizzaOrder { PizzaOrderId =1, OrderTotal= 0, CustomerName="XX", PizzaOrderItems = new List<PizzaOrderItem>() }, new PizzaOrder { PizzaOrderId=2, CustomerName="AA", OrderTotal=0, PizzaOrderItems = new List<PizzaOrderItem>() } };
 			context.PizzaOrders
 				//.Include(Arg.Any<System.Linq.Expressions.Expression<System.Func<PizzaOrder, object>>>())
 				//.ThenInclude(Arg.Any<System.Linq.Expressions.Expression<System.Func<PizzaOrderItem, object>>>())
@@ -85,7 +86,7 @@ namespace TestProject
 			// Arrange
 			var context = Substitute.For<IPizzaOrderCenterDbContext>();
 			var pizzaOrderId = 1;
-			var existingPizzaOrder = new PizzaOrder { /* Set existing pizza order properties */ };
+			var existingPizzaOrder = new PizzaOrder {  PizzaOrderId=1, CustomerName= "ZZ", PizzaOrderItems= new List<PizzaOrderItem>(), OrderTotal=0 };
 			context.PizzaOrders.FirstOrDefault(Arg.Any<System.Linq.Expressions.Expression<System.Func<PizzaOrder, bool>>>())
 				.Returns(existingPizzaOrder);
 
@@ -107,7 +108,7 @@ namespace TestProject
 			// Arrange
 			var context = Substitute.For<IPizzaOrderCenterDbContext>();
 			var pizzaOrderId = 1;
-			var existingPizzaOrder = new PizzaOrder { /* Set existing pizza order properties */ };
+			var existingPizzaOrder = new PizzaOrder {  PizzaOrderId=1, OrderTotal= 0, CustomerName= "ZZ", PizzaOrderItems = new List<PizzaOrderItem>() };
 			context.PizzaOrders.FirstOrDefault(Arg.Any<System.Linq.Expressions.Expression<System.Func<PizzaOrder, bool>>>())
 				.Returns(existingPizzaOrder);
 
