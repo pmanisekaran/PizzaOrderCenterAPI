@@ -91,5 +91,40 @@ namespace TestProject
 			pizzaOrder.PizzaOrderItems[0].LineTotal.Should().Be(22m); // Expected line total for first item
 			pizzaOrder.PizzaOrderItems[1].LineTotal.Should().Be(16m); // Expected line total for second item
 		}
+
+		// Negative test case for CalculateAndSetOrderTotal method with empty PizzaOrderItems
+		[Fact]
+		public void CalculateAndSetOrderTotal_EmptyPizzaOrderItems_ShouldNotCalculateOrderTotal()
+		{
+			// Arrange
+			var pizzaOrder = new PizzaOrder { PizzaOrderItems = new List<PizzaOrderItem>() };
+			var pizza1 = new Pizza { PizzaId = 1, PizzaPrice = 10m };
+			var pizza2 = new Pizza { PizzaId = 2, PizzaPrice = 15m };
+
+			var topping1 = new PizzaTopping { PizzaToppingId = 1, PizzaToppingPrice = 1m };
+			var topping2 = new PizzaTopping { PizzaToppingId = 2, PizzaToppingPrice = 1m };
+
+			var pizzas = new List<Pizza>()
+			{
+				pizza1,
+				pizza2,
+			};
+
+
+			var toppings = new List<PizzaTopping>()
+			{
+				topping1,
+				topping2,
+			};
+
+			// Mock the context using NSubstitute
+			var context = Substitute.For<IPizzaOrderCenterDbContext>();
+
+			// Act
+			OrderCalculator.CalculateAndSetOrderTotal(pizzaOrder, pizzas, toppings);
+
+			// Assert
+			pizzaOrder.OrderTotal.Should().Be(0); // The total should remain 0 for an empty list
+		}
 	}
 }
