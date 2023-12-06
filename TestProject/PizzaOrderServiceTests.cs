@@ -14,7 +14,7 @@ namespace TestProject
 {
 	public class PizzaOrderServiceTests
 	{
-		// SOME WORK NEEDS TO BE DONE HERE as MOCKING ALL DBCONTEXT is bit complex.
+		// SOME WORK NEEDS TO BE DONE HERE as MOCKING ALL DBCONTEXT is bit complex. It is work in progress
 
 		// Test Save method when adding a new PizzaOrder
 		[Fact]
