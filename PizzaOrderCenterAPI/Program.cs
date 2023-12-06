@@ -11,6 +11,7 @@ internal class Program
 {
 	private static void Main(string[] args)
 	{
+		
 		var builder = WebApplication.CreateBuilder(args);
 
 		// Add services to the container.
@@ -22,6 +23,22 @@ internal class Program
 		// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen();
+
+		//builder.Services.AddCors(options =>
+		//{
+		//	options.AddPolicy(name: MyAllowSpecificOrigins,
+		//					  policy =>
+		//					  {
+		//						  policy.WithOrigins("http://localhost:3000",
+		//											  "*");
+		//					  });
+		//});
+
+		builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+		{
+			builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+		}));
+
 
 		var app = builder.Build();
 
@@ -39,6 +56,7 @@ internal class Program
 
 		app.MapControllers();
 
+		app.UseCors("MyPolicy");
 		app.InitialiseInMemoryDatabase(configurationManager); //extension method
 		app.Run();
 		
