@@ -3,7 +3,7 @@
 namespace PizzaOrderCenterAPI.Models
 {
 	/// <summary>
-	/// Pizza order. Order can contain multipple pizzs from same location and also pizza from different location in the same order
+	/// Pizza order. Order can contain multipple pizzas from same location and also pizza from different location in the same order
 	/// </summary>
 	public class PizzaOrder
 	{

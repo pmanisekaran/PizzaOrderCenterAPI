@@ -24,7 +24,7 @@ namespace PizzaOrderCenterAPI.Services
 				
 				
 				existingPizzaOrder.PizzaOrderId = pizzaOrder.PizzaOrderId;
-				existingPizzaOrder.CustomerName = Guid.NewGuid().ToString();
+				existingPizzaOrder.CustomerName = pizzaOrder.CustomerName== null ? "XX" :pizzaOrder.CustomerName;
 				foreach (var item in pizzaOrder.PizzaOrderItems)
 				{
 					var existingItem = existingPizzaOrder.PizzaOrderItems.FirstOrDefault(x => x.PizzaOrderItemId == x.PizzaOrderItemId);
