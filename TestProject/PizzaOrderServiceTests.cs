@@ -1,15 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
-using NSubstitute;
+﻿using FluentAssertions;
 using PizzaOrderCenterAPI.DataAccess;
 using PizzaOrderCenterAPI.Models;
 using PizzaOrderCenterAPI.Services;
-using Xunit;
 using Microsoft.EntityFrameworkCore;
-using PizzaOrderCenterAPI.DataAccess;
-using PizzaOrderCenterAPI.Models;
-using System;
 
 namespace TestProject
 {
@@ -21,7 +14,7 @@ namespace TestProject
 			_context = new PizzaOrderCenterDbContext(
 				new DbContextOptionsBuilder<PizzaOrderCenterDbContext>()
 					.UseInMemoryDatabase("TestDatabase")
-					.Options, null);
+					.Options);
 		}
 		// SOME WORK NEEDS TO BE DONE HERE as MOCKING ALL DBCONTEXT is bit complex. It is work in progress
 
