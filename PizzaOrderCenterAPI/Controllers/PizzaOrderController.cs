@@ -18,33 +18,30 @@ namespace PizzaOrderCenterAPI.Controllers
 
 		// GET: api/<PizzeriaController>
 		[HttpGet]
-		public List<PizzaOrder> Get()
+		public async Task<List<PizzaOrder>> Get()
 		{
-			return _pizzaOrderService.GetAll().ToList();
+			return await _pizzaOrderService.GetAll();
 		}
 
 		// GET api/<PizzeriaController>/5
 		// if id does not exists, no content is returned, otherwise code 204 and the actual object
 		[HttpGet("{id}")]
-		public PizzaOrder? Get(int id)
-		{
-			return _pizzaOrderService.GetPizzaOrder(id);
-		}
+		public async Task<PizzaOrder?> Get(int id) => await _pizzaOrderService.GetPizzaOrder(id);
 
 		// POST api/<PizzeriaController>
 		[HttpPost]
-		public PizzaOrder? Save(PizzaOrder pizzaOrder)
+		public async Task<PizzaOrder?> Save(PizzaOrder pizzaOrder)
 		{
-			return _pizzaOrderService.Save(pizzaOrder);
+			return await _pizzaOrderService.Save(pizzaOrder);
 		}
 
 		
 		// DELETE api/<PizzeriaController>/5
 		// if id does not exists, no content is returned otherwise code 204 and the actual object
 		[HttpDelete("{id}")]
-		public PizzaOrder? Delete(int id)
+		public async Task<PizzaOrder?> Delete(int id)
 		{
-			return _pizzaOrderService.Delete(id);
+			return await _pizzaOrderService.Delete(id);
 		}
 	}
 }

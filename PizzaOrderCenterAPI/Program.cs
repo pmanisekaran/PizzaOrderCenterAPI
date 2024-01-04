@@ -56,6 +56,7 @@ internal class Program
 
 		app.MapControllers();
 
+
 		app.UseCors("MyPolicy");
 		app.InitialiseInMemoryDatabase(configurationManager); //extension method
 		app.Run();

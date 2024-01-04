@@ -9,15 +9,15 @@ namespace PizzaOrderCenterAPI.Services
 		private IPizzaOrderCenterDbContext _context;
 		public PizzaOrderService(IPizzaOrderCenterDbContext pizzaOrderCenterDbContext) => _context = pizzaOrderCenterDbContext;
 
-		public PizzaOrder? Save(PizzaOrder pizzaOrder)
+		public async Task<PizzaOrder?> Save(PizzaOrder pizzaOrder)
 		{
 			//skipping topping for now
 			// you cannot delete items from existing order when you update
 
-			var existingPizzaOrder = _context.PizzaOrders
+			var existingPizzaOrder = await _context.PizzaOrders
 									.Where(x => x.PizzaOrderId == pizzaOrder.PizzaOrderId)
 									.Include(x=>x.PizzaOrderItems)
-									.SingleOrDefault();
+									.SingleOrDefaultAsync();
 									
 			if (existingPizzaOrder != null)
 			{
@@ -43,26 +43,26 @@ namespace PizzaOrderCenterAPI.Services
 				
 			}
 			else
-				_context.PizzaOrders.Add(pizzaOrder);
+			await 	_context.PizzaOrders.AddAsync(pizzaOrder);
 			
 			pizzaOrder = existingPizzaOrder == null ? pizzaOrder : existingPizzaOrder;
 
 			OrderCalculator.CalculateAndSetOrderTotal(pizzaOrder, _context.Pizzas.ToList(), _context.Toppings.ToList());
 			_context.Save();
-			return _context.PizzaOrders.FirstOrDefault(x => x.PizzaOrderId == pizzaOrder.PizzaOrderId);
+			return await _context.PizzaOrders.FirstOrDefaultAsync(x => x.PizzaOrderId == pizzaOrder.PizzaOrderId);
 		}
 
-		public List<PizzaOrder> GetAll()
+		public async Task<List<PizzaOrder>> GetAll()
 		{
-			return 	_context.PizzaOrders
+			return  await _context.PizzaOrders
 					.Include(order=> order.PizzaOrderItems)
 					.ThenInclude(item=> item.PizzaOrderItemToppings)
-					.ToList();
+					.ToListAsync();
 		}
 
-		public PizzaOrder? Delete(int pizzaOrderId)
+		public async Task<PizzaOrder?> Delete(int pizzaOrderId)
 		{ 
-			var pizzaOrder = _context.PizzaOrders.FirstOrDefault(x => x.PizzaOrderId == pizzaOrderId);
+			var pizzaOrder = await _context.PizzaOrders.FirstOrDefaultAsync(x => x.PizzaOrderId == pizzaOrderId);
 			if (pizzaOrder != null)
 			{
 				_context.PizzaOrders.Remove(pizzaOrder);
@@ -75,9 +75,9 @@ namespace PizzaOrderCenterAPI.Services
 
 		}
 
-		public PizzaOrder? GetPizzaOrder(int PizzaOrderId) {
+		public async Task<PizzaOrder?> GetPizzaOrder(int PizzaOrderId) {
 
-			return _context.PizzaOrders.FirstOrDefault(x => x.PizzaOrderId == PizzaOrderId);
+			return await _context.PizzaOrders.FirstOrDefaultAsync(x => x.PizzaOrderId == PizzaOrderId);
 		}
 
 	}

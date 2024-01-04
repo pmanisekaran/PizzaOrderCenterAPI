@@ -4,11 +4,11 @@ namespace PizzaOrderCenterAPI.Services
 {
 	public interface IPizzaOrderService
 	{
-		PizzaOrder? Save(PizzaOrder pizza);
-		List<PizzaOrder> GetAll();
+		Task<PizzaOrder?> Save(PizzaOrder pizza);
+		Task<List<PizzaOrder>> GetAll();
 
-		PizzaOrder? Delete(int id);
+		Task<PizzaOrder?> Delete(int id);
 
-		PizzaOrder? GetPizzaOrder(int id);
+		Task<PizzaOrder?> GetPizzaOrder(int id);
 	}
 }

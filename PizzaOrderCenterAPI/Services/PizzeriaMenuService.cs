@@ -1,4 +1,5 @@
-﻿using PizzaOrderCenterAPI.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using PizzaOrderCenterAPI.DataAccess;
 using PizzaOrderCenterAPI.Models;
 
 namespace PizzaOrderCenterAPI.Services
@@ -8,9 +9,9 @@ namespace PizzaOrderCenterAPI.Services
 		private IPizzaOrderCenterDbContext _context;
 		public PizzeriaMenuService(IPizzaOrderCenterDbContext pizzaOrderCenterDbContext) => _context = pizzaOrderCenterDbContext;
 
-		public Pizza? Save(Pizza pizza)
+		public async Task<Pizza?> Save(Pizza pizza)
 		{
-			var existingPizza = _context.Pizzas.FirstOrDefault(x => x.PizzaId == pizza.PizzaId);
+			var existingPizza = await _context.Pizzas.FirstOrDefaultAsync(x => x.PizzaId == pizza.PizzaId);
 			if (existingPizza != null)
 			{
 				existingPizza.PizzaId = pizza.PizzaId;
@@ -18,34 +19,30 @@ namespace PizzaOrderCenterAPI.Services
 				existingPizza.PizzaPrice = pizza.PizzaPrice;
 			}
 			else
-				_context.Pizzas.Add(pizza);
+				await _context.Pizzas.AddAsync(pizza);
 			_context.Save();
-			return _context.Pizzas.FirstOrDefault(x => x.PizzaId == pizza.PizzaId);
+			return await _context.Pizzas.FirstOrDefaultAsync(x => x.PizzaId == pizza.PizzaId);
 		}
 
-		public List<Pizza> GetAll()
+		public async Task<List<Pizza>> GetAll()
 		{
-			return 	_context.Pizzas.ToList();
+			return await _context.Pizzas.ToListAsync();
 		}
 
-		public Pizza? Delete(int pizzaId)
-		{ 
-			var Pizza = _context.Pizzas.FirstOrDefault(x => x.PizzaId == pizzaId);
+		public async Task<Pizza?> Delete(int pizzaId)
+		{
+			var Pizza = await _context.Pizzas.FirstOrDefaultAsync(x => x.PizzaId == pizzaId);
 			if (Pizza != null)
 			{
 				_context.Pizzas.Remove(Pizza);
 				_context.Save();
 			}
 			return Pizza;
-			
-
-
-
 		}
 
-		public Pizza? GetPizza(int pizzaId) {
-
-			return _context.Pizzas.FirstOrDefault(x => x.PizzaId == pizzaId);
+		public async Task<Pizza?> GetPizza(int pizzaId)
+		{
+			return await _context.Pizzas.FirstOrDefaultAsync(x => x.PizzaId == pizzaId);
 		}
 
 	}

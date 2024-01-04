@@ -1,4 +1,5 @@
-﻿using PizzaOrderCenterAPI.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using PizzaOrderCenterAPI.DataAccess;
 using PizzaOrderCenterAPI.Models;
 
 namespace PizzaOrderCenterAPI.Services
@@ -8,9 +9,9 @@ namespace PizzaOrderCenterAPI.Services
 		private IPizzaOrderCenterDbContext _context;
 		public PizzaToppingService(IPizzaOrderCenterDbContext pizzaOrderCenterDbContext) => _context = pizzaOrderCenterDbContext;
 
-		public PizzaTopping? Save(PizzaTopping PizzaTopping)
+		public async  Task<PizzaTopping?> Save(PizzaTopping PizzaTopping)
 		{
-			var existingPizzaTopping = _context.Toppings.FirstOrDefault(x => x.PizzaToppingId == PizzaTopping.PizzaToppingId);
+			var existingPizzaTopping = await _context.Toppings.FirstOrDefaultAsync(x => x.PizzaToppingId == PizzaTopping.PizzaToppingId);
 			if (existingPizzaTopping != null)
 			{
 				existingPizzaTopping.PizzaToppingId = PizzaTopping.PizzaToppingId;
@@ -18,19 +19,19 @@ namespace PizzaOrderCenterAPI.Services
 				
 			}
 			else
-				_context.Toppings.Add(PizzaTopping);
+				await _context.Toppings.AddAsync(PizzaTopping);
 			_context.Save();
-			return _context.Toppings.FirstOrDefault(x => x.PizzaToppingId == PizzaTopping.PizzaToppingId);
+			return await _context.Toppings.FirstOrDefaultAsync(x => x.PizzaToppingId == PizzaTopping.PizzaToppingId);
 		}
 
-		public List<PizzaTopping> GetAll()
+		public async Task<List<PizzaTopping>> GetAll()
 		{
-			return 	_context.Toppings.ToList();
+			return 	await _context.Toppings.ToListAsync();
 		}
 
-		public PizzaTopping? Delete(int pizzaToppingId)
+		public async Task<PizzaTopping?> Delete(int pizzaToppingId)
 		{ 
-			var PizzaTopping = _context.Toppings.FirstOrDefault(x => x.PizzaToppingId == pizzaToppingId);
+			var PizzaTopping = await _context.Toppings.FirstOrDefaultAsync(x => x.PizzaToppingId == pizzaToppingId);
 			if (PizzaTopping != null)
 			{
 				_context.Toppings.Remove(PizzaTopping);
@@ -43,9 +44,9 @@ namespace PizzaOrderCenterAPI.Services
 
 		}
 
-		public PizzaTopping? GetPizzaTopping(int PizzaToppingId) {
+		public async Task<PizzaTopping?> GetPizzaTopping(int PizzaToppingId) {
 
-			return _context.Toppings.FirstOrDefault(x => x.PizzaToppingId == PizzaToppingId);
+			return await _context.Toppings.FirstOrDefaultAsync(x => x.PizzaToppingId == PizzaToppingId);
 		}
 
 	}
